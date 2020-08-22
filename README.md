@@ -10,7 +10,7 @@ The Kalman filter is an algorithm for calculating the optimal state of a linear 
 
 ![Equations of Motion Model](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/motionModelEquations.png?raw=true)
 
-![Equations of Measurement Model]https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/measurementModelEquations.png?raw=true)
+![Equations of Measurement Model](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/measurementModelEquations.png?raw=true)
 
 To implement the filter I followed the formulas given on Wikipedia. After loading the csv files, we need to convert the radius to the range [-π, π].
 Then, the tables and the filter are initialized and an iteration structure is started for each measurement. For each measurement the predict and update step is implemented. At the end we have the final estimate of the 7 situations and the diagram showing the evolution of prediction and uncertainty. 
