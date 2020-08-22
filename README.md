@@ -3,14 +3,14 @@
 ## Extended Kalman Filter
 
 ***The datasets of this project are ommited. We need two csv datasets, one with the sensor measurements and the other with the radar measurements***
-***control.csv consists of 2 columns for the velocity and angular velocity ****
-***radar.csv consists of 4 columns for distance and angle of each obstacle ****
+***control.csv consists of 2 columns for the velocity and angular velocity***
+***radar.csv consists of 4 columns for distance and angle of each obstacle***
 
 The Kalman filter is an algorithm for calculating the optimal state of a linear system, which is subject to noises. That noises make the conclusions we draw unreliable. The Extended Kalman Filter is used for non-linear problems by transforming them into linear ones. Linearizes the functions f (x, u) and h (x) by taking the partial derivatives of each at the points x and u. This is called Jacobian matrix. Below are the equations of the motion model, the measurement model and the corresponding Jacobian ones. Obstacles are considered stable. There are two obstacles.
 
-![Equations of Motion Model](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/[master]/images/motionModelEquations.png?raw=true)
+![Equations of Motion Model](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/motionModelEquations.png?raw=true)
 
-![Equations of Measurement Model](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters]/blob/master/images/measurementModelEquations.png?raw=true)
+![Equations of Measurement Model]https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/measurementModelEquations.png?raw=true)
 
 To implement the filter I followed the formulas given on Wikipedia. After loading the csv files, we need to convert the radius to the range [-π, π].
 Then, the tables and the filter are initialized and an iteration structure is started for each measurement. For each measurement the predict and update step is implemented. At the end we have the final estimate of the 7 situations and the diagram showing the evolution of prediction and uncertainty. 
