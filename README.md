@@ -1,6 +1,6 @@
 # Vehicle and Obstacle Position Estimation using Extended Kalman and Particle Filters
 
-The project, presents three cases to solve the problem of the estimation of vehicle and obstacles position. In the first case, I used Extended Kalman Filters considering that the obstacles were motionless. In the second case, I used Particle Filters. I tried to estimate the position of the vehicle. The obstacles were motionless and as coordinates I used the values that Extended Kalman Filter had predicted in the first case. Last, in the third case, I assumed that the second obstacle was moving and i tried to predict the position of the vehicle and the position of the obstacle.
+The project, presents three cases to solve the problem of the estimation of vehicle and obstacles position. In the first case, I used **Extended Kalman Filters** considering that the obstacles were motionless. In the second case, I used **Particle Filters**. I tried to estimate the position of the vehicle. The obstacles were motionless and as coordinates I used the values that Extended Kalman Filter had predicted in the first case. Last, in the third case, I assumed that the second obstacle was moving and i tried to predict the position of the vehicle and the position of the obstacle.
 
 # Description of the repository
 
@@ -37,14 +37,43 @@ Noise tables are very important to be properly defined for the problem as they h
 
 Below, is the result of an execution of EKF where all the above are perceived. The assessment of the position - movement of the vehicle follows a smooth course. Initially, we observe that the uncertainty is almost zero while as we go into the long run it grows. (+) Is the position and the lack indicates the uncertainty. This is expected because in every estimate we have the effect / addition of noise and as we move forward in time, with each prediction we lose a percentage of our original information. The uncertainty of estimating the position of the obstacles follows the opposite course from that of the vehicle, ie the uncertainty is constantly decreasing. This conclusion is to be expected because the obstacles are constant so in any assessment the system is able to improve its belief / knowledge about prediction.
 
+**Results of Extended Kalman Filter**
 ![Results of Extended Kalman Filter](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/ExtendedKalmanFilterResults.png?raw=true)
 
 ## Particle Filter 2
 
+The idea of ​​the Particle Filter is based on Monte Carlo methods, which use sets of particles that represent probabilities (possible states of the system - space exploration). A weight is calculated for each probability and as we move forward in time the model converges to a specific situation. The main advantage of the Particle Filter is the ability to handle any non-linearity and any noise distribution. However, it has a high computational complexity as the variables and complexity of the problem increase. 
+
+The algorithm is based on 5 steps. 
+1. The first step is to randomly generate a set of particles. The particles consist of 3 values ​​(x, y, θ) which are the states to be estimated. Each has a weight (probability) that indicates how likely it is to match the actual state of the system. In initialization everything has the same weight (1 / N). The uniform and normal distribution (Gauss) was tested and the normal one was chosen as it had better results because the particles were initialized close to the initial state (0.0.0) and not uniform in space. 
+2. The second step is to predict the next state of the particles. This way should reflect the behavior of the real system. Therefore, I use the given state equations (in the previous position of the vehicle) by introducing noise and multiplying by the displacement (dt = 0.1). The measurements are noisy so this must be taken into account during the forecast step. 
+3. The third step is update. The update is based on radar measurements. Particles that match the measurements score higher than particles that do not match as well. This step also included measuring distance and angle to make a more accurate prediction. 
+4. The fourth step is sampling. A common problem is that very few particles contribute to the estimation process and the rest have very small weights. In this case the sampling is performed. The sampling algorithm rejects very low probability particles and replaces them with new particles with a higher probability. This is done by reproducing particles with a relatively high probability. The copies are slightly scattered by the noise added to the prediction step. This results in a set of points at which a large majority of the particles accurately represent the probability distribution. The threshold selected for sampling is N * 0.7 (N: number of particles).
+5. The fifth and final step is to assess the final situation. But because we have many states, the weighted average and the variability of the set of particles are calculated.
+
+The figure below, presents the final solutions. On the left we can see the final solution. On the right, a zoom of particles distribution. We notice that in the beginning the particles spread in space and slowly converge with the repetitions / corrections. In the end, the particles converge in the final solution.
+
+**Results of Particle Filter 2**
+![Results of Particle Filter 2](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/ParticleFilters2Results.png?raw=true)
+
 ## Particle Filter 3
 
+The 3rd case is similar to the 2nd with the difference that the 2nd obstacle moves at a constant and unknown speed by x. This means that 2 new states are added to the equation, the x position of the obstacle and its velocity. The equations of the motion model are 5 (x, y, θ, xobst, uobst) and are shown below.
 
+**Particle Filter 3 Equations**
+![Results of Particle Filter 2](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/particleFilter3Equations.png?raw=true)
 
+To model the x-position of the obstacle I used the above functions. From the velocity equation it follows that the displacement is x = x + u * dt. This measurement has the noise added to the speed. The other options (N, Q, R, Resample method) remained the same as in case 2. Finally, for the selection of the initial speed and movement of the obstacle, the values ​​from the radar and control files were observed. Initially, the vehicle speed sign confirms that the vehicle is moving correctly (positive speed right and negative left). Then, taking into account the above with the distance of the obstacle from the vehicle, it results that the obstacle moves to the right (as when the vehicle goes to the left the distance decreases and the speed is constant). The initial value I gave to the obstacle is 
+0.6 which results from observing the values ​​of distances and angles.
 
+In figure below on the left we see the vehicle following the same movement as the previous 2 cases and the obstacle moving to the right. To the right are the magnified particles, 6 repetitions up and 1 down showing their convergence which took place in the first repetitions. 
+
+**Results of Particle Filter 3**
+![Results of Particle Filter 3](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/ParticleFilters3Results1.png?raw=true)
+
+ In figure below we see in magnification the course of the vehicle. At the beginning there are many values ​​added and then they dilute. This is because the obstacle at first went right to left until it stabilized to the right.
+
+**Results of Particle Filter 3**
+![Results of Particle Filter 3](https://github.com/AngelikiTsintzira/Vehicle-and-Obstacle-Position-Estimation-using-Extended-Kalman-and-Particle-Filters/blob/master/images/ParticleFilters3Results2.png?raw=true)
 
 
